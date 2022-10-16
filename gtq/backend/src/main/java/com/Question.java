@@ -9,9 +9,6 @@ public class Question {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer questionId;
 
-  @Column(name = "game_id")
-  private Integer gameId;
-
   @Column(name = "player_id")
   private Integer playerId;
 
@@ -21,11 +18,21 @@ public class Question {
   @Column(name = "answered")
   private Boolean answered;
 
-  public Question(Integer questionId, Integer gameId, Integer playerId, String question, Boolean answered) {
-    this.questionId = questionId;
-    this.gameId = gameId;
+  public Question(Integer playerId, String question, Boolean answered) {
     this.playerId = playerId;
     this.question = question;
     this.answered = answered;
+  }
+
+  public Integer getPlayerId() {
+    return playerId;
+  }
+
+  public String getQuestion() {
+    return question;
+  }
+
+  public Boolean getAnswered() {
+    return answered;
   }
 }

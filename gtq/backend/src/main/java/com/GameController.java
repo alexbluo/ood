@@ -14,7 +14,6 @@ public class GameController {
 
   @PostMapping("/game/create")
   public ResponseEntity<Game> createGame() {
-    gameRepository.save(new Game());
     try {
       Game _game = gameRepository
           .save(new Game());
