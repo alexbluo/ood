@@ -1,15 +1,17 @@
-// package com;
+package com;
 
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-// @RestController
-// public class GameController {
+@RestController
+public class GameController {
 
-//   @GetMapping("/")
-//   public Game index() {
+  @Autowired
+  private GameRepository gameRepository; 
 
-//   }
-
-
-// }
+  @PostMapping("/game/create")
+  public void createGame() {
+    gameRepository.save(new Game());
+  }
+}

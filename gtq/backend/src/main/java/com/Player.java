@@ -1,23 +1,35 @@
 package com;
 
-public class Player {
-  private final int playerId;
-  private final int gameId;
-  private final String username;
-  private final int points;
+import javax.persistence.*;
 
-  public Player(int playerId, int gameId, String username, int points) {
-    this.playerId = playerId;
+@Entity
+@Table(name = "players")
+public class Player {
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "player_id")
+  private Integer playerId;
+
+  @Column(name = "game_id")
+  private Integer gameId;
+
+  @Column(name = "username")
+  private String username;
+
+  @Column(name = "points")
+  private Integer points;
+
+  public Player(Integer gameId, String username, Integer points) {
     this.gameId = gameId;
     this.username = username;
     this.points = points;
   }
 
-  public int getPlayerId() {
+  public Integer getPlayerId() {
     return playerId;
   }
 
-  public int getGameId() {
+  public Integer getGameId() {
     return gameId;
   }
 
@@ -25,7 +37,7 @@ public class Player {
     return username;
   }
 
-  public int getPoints() {
+  public Integer getPoints() {
     return points;
   }
 }
