@@ -16,8 +16,11 @@ CREATE TABLE IF NOT EXISTS players (
 CREATE TABLE IF NOT EXISTS questions (
   question_id serial PRIMARY KEY UNIQUE NOT NULL,
   player_id serial NOT NULL,
+  game_id serial NOT NULL,
   question text NOT NULL,
   answered boolean NOT NULL,
   FOREIGN KEY (player_id)
+    REFERENCES players (player_id),
+  FOREIGN KEY (game_id)
     REFERENCES players (player_id)
 )

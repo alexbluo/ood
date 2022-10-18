@@ -57,4 +57,8 @@ public class Player {
   public Integer getPoints() {
     return points;
   }
+
+  public void increment() {
+    points++;
+  }
 }

@@ -60,7 +60,6 @@ const Home: NextPage = () => {
       <button className="rounded-md border-2 border-black p-4">
         Create Game
       </button>
-      {/* <span>put error here based on res</span> */}
     </div>
   );
 };
