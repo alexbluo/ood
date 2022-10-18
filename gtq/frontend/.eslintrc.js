@@ -24,6 +24,7 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     "react/self-closing-comp": "off",
     "react/button-has-type": "off",
+    "jsx-a11y/label-has-associated-control": "off",
     "react/function-component-definition": [
       "error",
       {

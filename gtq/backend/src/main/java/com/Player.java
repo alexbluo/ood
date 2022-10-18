@@ -19,6 +19,23 @@ public class Player {
   @Column(name = "points")
   private Integer points;
 
+  public Player() {
+    this.username = "Guest";
+    this.points = 0;
+  }
+
+  public Player(Integer gameId) {
+    this.gameId = gameId;
+    this.username = "Guest";
+    this.points = 0;
+  }
+
+  public Player(Integer gameId, String username) {
+    this.gameId = gameId;
+    this.username = username;
+    this.points = 0;
+  }
+
   public Player(Integer gameId, String username, Integer points) {
     this.gameId = gameId;
     this.username = username;
