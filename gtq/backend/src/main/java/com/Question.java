@@ -1,46 +1,13 @@
 package com;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "questions")
-public class Question {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Integer questionId;
-
-  @Column(name = "player_id")
-  private Integer playerId;
-
-  @Column(name = "game_id")
-  private Integer gameId;
-
-  @Column(name = "question")
+public class Question implements Comparable<Question> {
   private String question;
 
-  @Column(name = "answer")
   private String answer;
 
-  @Column(name = "answered")
-  private Boolean answered;
-
-  public Question(Integer playerId, Integer gameId, String question, String answer, Boolean answered) {
-    this.playerId = playerId;
-    this.gameId = gameId;
+  public Question(String question, String answer) {
     this.question = question;
-    this.answered = answered;
-  }
-
-  public Integer getQuestionId() {
-    return questionId;
-  }
-
-  public Integer getPlayerId() {
-    return playerId;
-  }
-
-  public Integer getGameId() {
-    return gameId;
+    this.answer = answer;
   }
 
   public String getQuestion() {
@@ -51,11 +18,8 @@ public class Question {
     return answer;
   }
 
-  public Boolean getAnswered() {
-    return answered;
-  }
-
-  public void setAnsweredToTrue() {
-    answered = true;
+  @Override
+  public int compareTo(Question q) {
+    return question.compareTo(q.getQuestion());
   }
 }

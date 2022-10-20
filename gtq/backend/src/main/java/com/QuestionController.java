@@ -1,8 +1,10 @@
 package com;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.PriorityQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,64 +18,34 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class QuestionController {
 
-  @Autowired
-  private QuestionRepository questionRepository;
+  Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
-  @GetMapping("/question/{gameId}")
-  public ResponseEntity<Question> getUnansweredQuestion(@PathVariable Integer gameId) {
-    try {
-      List<Question> _questions = questionRepository.findAll();
+  PriorityQueue<Question> questions = new PriorityQueue<>();
 
-      for (Question _question : _questions) {
-        if (_question.getGameId() == gameId && _question.getAnswered() == false) {
-          return new ResponseEntity<>(_question, HttpStatus.OK);
-        }
-      }
+  Question current = null;
 
-      return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
+  @GetMapping("/question/next")
+  public Question getNext() {
+    if (questions.isEmpty())
+      return null;
 
-  @PostMapping("/question/true")
-  public ResponseEntity<Question> setAnsweredToTrue(@RequestBody Integer questionId) {
-    try {
-      Optional<Question> _question = questionRepository.findById(questionId);
-
-      _question.get().setAnsweredToTrue();
-
-      return new ResponseEntity<>(_question.get(), HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    current = questions.remove();
+    return current;
   }
 
   @PostMapping("/question/create")
-  public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
-    try {
-      Question _question = questionRepository
-          .save(new Question(question.getPlayerId(), question.getGameId(), question.getQuestion(), question.getAnswer(),
-              false));
-      return new ResponseEntity<>(_question, HttpStatus.CREATED);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  public void createQuestion(@RequestBody Question question) {
+    questions.add(new Question(question.getQuestion(), question.getAnswer()));
   }
 
   @GetMapping("/question/check")
-  public ResponseEntity<Boolean> checkGuess(@RequestBody Question question, @RequestParam(name = "guess") String guess) {
-    try {
-      List<Question> _questions = questionRepository.findAll();
+  public boolean checkGuess(@RequestParam String guess, @RequestParam String player) {
+    logger.info(guess);
+    return guess.equals(current.getAnswer());
+  }
 
-      for (Question _question : _questions) {
-        if (_question.getQuestionId() == question.getQuestionId() && _question.getAnswer().equals(guess)) {
-          return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-      }
-      return new ResponseEntity<>(false, HttpStatus.CREATED);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  @PostMapping("/question/reset") 
+  public void resetQuestion() {
+    questions = new PriorityQueue<>();
   }
 }
