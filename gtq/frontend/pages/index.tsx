@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 import { NextPage } from "next";
 import { useMutation, useQuery } from "react-query";
@@ -116,7 +116,7 @@ const Home: NextPage = () => {
     <div className="flex h-screen flex-col items-center justify-center p-16">
       <h1 className="mb-16 text-center text-4xl font-bold">Guess the Quote</h1>
       <h2 className="mb-16 text-center text-3xl font-bold">
-        {question ? `"${question.question}"` : "Please enter a quote!"}
+        {question && winner === "" ? `"${question.question}"` : "Please enter a quote!"}
       </h2>
       {winner !== "" && (
         <>
