@@ -8,8 +8,8 @@ interface Props {
 
 const Tile = ({ src, alt, type }: Props) => {
   return (
-    <div className="relative">
-      <Image src={src} alt={alt} fill></Image>
+    <div className="relative w-full aspect-square">
+      <Image src={`${src}`} alt={alt} fill></Image>
     </div>
   );
 };
