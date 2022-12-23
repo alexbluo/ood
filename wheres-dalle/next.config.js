@@ -9,8 +9,13 @@ const nextConfig = {
         hostname: "**.unsplash.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "oaidalleapiprodscus.blob.core.windows.net",
+        pathname: "/**",
+      },
     ],
   },
 };
 
-module.exports = nextConfig
+module.exports = nextConfig;

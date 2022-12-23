@@ -4,13 +4,17 @@ interface Props {
   src: string;
   alt: string;
   type: "unsplash" | "dalle";
+  onClick: (type: string) => void;
 }
 
-const Tile = ({ src, alt, type }: Props) => {
+const Tile = ({ src, alt, type, onClick }: Props) => {
   return (
-    <div className="relative w-full aspect-square">
+    <button
+      className="relative w-full aspect-square"
+      onClick={() => onClick(type)}
+    >
       <Image src={`${src}`} alt={alt} fill></Image>
-    </div>
+    </button>
   );
 };
 
