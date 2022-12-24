@@ -5,34 +5,38 @@ import Tile from "../components/Tile";
 
 const Index = () => {
   const [round, setRound] = useState<number>(0);
+  const [score, setScore] = useState<number>(0);
+  const [end, setEnd] = useState<boolean>(false);
 
   const {
     data: unsplash,
     isLoading: unsplashIsLoading,
     isError: unsplashIsError,
+    refetch,
   } = useQuery(["unsplash"], async () => {
     const res = await axios.get(
-      `https://api.unsplash.com/photos/random?client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&count=10&orientation=squarish`
+      `https://api.unsplash.com/photos/?client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}&count=25&orientation=squarish&9218743`
     );
-    console.log(res);
 
-    return {
-      url: res.data[round].urls.full,
-      description: res.data[round].alt_description,
-    };
+    return res.data
+      .map((image: any) => {
+        return { url: image.urls.full, description: image.alt_description };
+      })
+      .filter((image: any) => image.description != null);
   });
+  console.log(unsplash?.length);
 
   const {
     data: dalle,
     isLoading: dalleIsLoading,
     isError: dalleIsError,
   } = useQuery(
-    ["dalle"],
+    ["dalle", round],
     async () => {
       const res = await axios.post(
         "https://api.openai.com/v1/images/generations",
         {
-          prompt: `stock photo of ${unsplash!.description}`,
+          prompt: `stock photo of ${unsplash[round].description}`,
           n: 1,
           size: "1024x1024",
         },
@@ -51,50 +55,63 @@ const Index = () => {
   const handleTileClick = (type: string) => {
     setRound((prev) => prev + 1);
 
-    if (type === "unsplash") {
-      console.log("hi");
+    if (type === "dalle") {
+      setScore((prev) => prev + 1);
     }
+
+    if (round === 4) {
+      setEnd(true);
+    }
+  };
+
+  const resetGame = () => {
+    setRound(0);
+    setScore(0);
+    refetch();
   };
 
   if (unsplashIsError) return <div>error</div>;
   if (dalleIsError) return <div>error</div>;
   return (
-    <div className="p-16">
+    <div className="p-[10vw]">
+      <h1 className="text-3xl">
+        score: {score} / {round}
+      </h1>
       <div className="grid grid-cols-2 w-full border border-black">
         {!unsplashIsLoading &&
           !dalleIsLoading &&
           (Math.floor(Math.random() * 2) === 0 ? (
             <>
               <Tile
-                src={unsplash!.url}
-                alt={unsplash!.description}
+                src={unsplash[round].url}
+                alt={unsplash[round].description}
                 type="unsplash"
                 onClick={handleTileClick}
-                key={unsplash!.url}
+                key={unsplash[round].url}
               />
               <Tile
-              src={dalle}
-              alt={unsplash!.description}
-              type="dalle"
-              onClick={handleTileClick}
-              key={dalle.url}
-            />
+                src={dalle}
+                alt={unsplash[round].description}
+                type="dalle"
+                onClick={handleTileClick}
+                key={dalle.url}
+              />
             </>
           ) : (
             <>
               <Tile
-              src={dalle}
-              alt={unsplash!.description}
-              type="dalle"
-              onClick={handleTileClick}
-              key={dalle.url}
-            />
+                src={dalle}
+                alt={unsplash[round].description}
+                type="dalle"
+                onClick={handleTileClick}
+                key={dalle.url}
+              />
               <Tile
-                src={unsplash!.url}
-                alt={unsplash!.description}
+                src={unsplash[round].url}
+                alt={unsplash[round].description}
                 type="unsplash"
                 onClick={handleTileClick}
-                key={unsplash!.url}
+                key={unsplash[round].url}
               />
             </>
           ))}

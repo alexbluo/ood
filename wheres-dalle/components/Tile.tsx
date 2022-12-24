@@ -13,7 +13,7 @@ const Tile = ({ src, alt, type, onClick }: Props) => {
       className="relative w-full aspect-square"
       onClick={() => onClick(type)}
     >
-      <Image src={`${src}`} alt={alt} fill></Image>
+      <Image src={`${src}`} alt={alt} fill sizes="40vw"></Image>
     </button>
   );
 };
